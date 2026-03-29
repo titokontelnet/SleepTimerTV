@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SleepTimer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#1A1A2E</item>
+        <item name="android:colorPrimary">#4A90D9</item>
+        <item name="android:colorPrimaryDark">#1A1A2E</item>
+        <item name="android:colorAccent">#4A90D9</item>
+    </style>
+
+</resources>

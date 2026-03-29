@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#1A1A2E"
+    android:padding="40dp">
+
+    <TextView
+        android:id="@+id/tv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🌙"
+        android:textSize="64sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sleep Timer"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona el tiempo de apagado"
+        android:textColor="#AAAACC"
+        android:textSize="22sp"
+        android:layout_marginBottom="40dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button android:id="@+id/btn_15"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="15 min"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+        <Button android:id="@+id/btn_30"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="30 min"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+        <Button android:id="@+id/btn_45"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="45 min"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button android:id="@+id/btn_60"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="60 min"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+        <Button android:id="@+id/btn_90"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="90 min"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+        <Button android:id="@+id/btn_120"
+            android:layout_width="160dp" android:layout_height="70dp"
+            android:layout_margin="8dp" android:text="2 horas"
+            android:textSize="22sp" android:textColor="#FFFFFF"
+            android:background="#16213E" android:focusable="true" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:text="Cancelar"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="#C0392B"
+        android:focusable="true" />
+
+</LinearLayout>

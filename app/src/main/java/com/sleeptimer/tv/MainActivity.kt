@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : Activity() {
 
@@ -39,11 +40,14 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dpm       = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        adminComp = ComponentName(this, TvDeviceAdminReceiver::class.java)
+        try {
+            dpm       = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+            adminComp = ComponentName(this, TvDeviceAdminReceiver::class.java)
+        } catch (e: Exception) {
+            // Continuar sin admin
+        }
 
         setupUI()
-        requestAdminIfNeeded()
     }
 
     private fun setupUI() {
@@ -65,42 +69,45 @@ class MainActivity : Activity() {
 
         cancelButton.setOnClickListener { cancelTimer() }
         cancelButton.visibility = View.GONE
-    }
-
-    private fun requestAdminIfNeeded() {
-        if (!dpm.isAdminActive(adminComp)) {
-            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-                putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComp)
-                putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Permiso requerido para apagar la pantalla automáticamente."
-                )
-            }
-            startActivityForResult(intent, REQUEST_ADMIN)
-        }
+        timerButtons.firstOrNull()?.requestFocus()
     }
 
     private fun startTimer(millis: Long, label: String) {
-        countDownTimer?.cancel()
+        if (::dpm.isInitialized && !dpm.isAdminActive(adminComp)) {
+            try {
+                val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+                    putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComp)
+                    putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        "Requerido para apagar la pantalla automáticamente.")
+                }
+                startActivityForResult(intent, REQUEST_ADMIN)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Activa el permiso de administrador", Toast.LENGTH_LONG).show()
+            }
+            return
+        }
 
+        countDownTimer?.cancel()
         timerButtons.forEach { it.isEnabled = false }
         cancelButton.visibility = View.VISIBLE
-        subtitleText.text = "Presiona Cancelar para detener"
+        cancelButton.requestFocus()
 
         countDownTimer = object : CountDownTimer(millis, 1000) {
             override fun onTick(remaining: Long) {
                 val m = remaining / 1000 / 60
                 val s = (remaining / 1000) % 60
                 statusText.text = "%d:%02d".format(m, s)
+                subtitleText.text = "Presiona Cancelar para detener"
             }
             override fun onFinish() {
-                statusText.text = "¡Buenas noches!"
+                statusText.text = "Buenas noches"
+                subtitleText.text = "Apagando pantalla..."
                 apagaPantalla()
             }
         }.start()
 
         statusText.text = label
-        subtitleText.text = "Iniciando…"
+        subtitleText.text = "Iniciando..."
     }
 
     private fun cancelTimer() {
@@ -110,17 +117,21 @@ class MainActivity : Activity() {
         cancelButton.visibility = View.GONE
         statusText.text = "Sleep Timer"
         subtitleText.text = "Selecciona el tiempo de apagado"
+        timerButtons.firstOrNull()?.requestFocus()
     }
 
     private fun apagaPantalla() {
-        if (dpm.isAdminActive(adminComp)) {
-            dpm.lockNow()
-        } else {
-            requestAdminIfNeeded()
+        try {
+            if (::dpm.isInitialized && dpm.isAdminActive(adminComp)) {
+                dpm.lockNow()
+            } else {
+                moveTaskToBack(true)
+            }
+        } catch (e: Exception) {
+            moveTaskToBack(true)
         }
     }
 
-    // Al presionar Atrás mientras corre el timer, lo deja activo en segundo plano
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && countDownTimer != null) {
             moveTaskToBack(true)
